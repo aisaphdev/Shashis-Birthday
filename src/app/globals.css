@@ -51,24 +51,23 @@ html, body {
    ============================================ */
 
 .glass-luxury {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(26, 21, 32, 0.88) 0%, rgba(20, 15, 25, 0.92) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 0 20px rgba(183, 110, 121, 0.05);
+    0 12px 36px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transform: translateZ(0);
 }
 
 .glass-pill {
-  background: rgba(183, 110, 121, 0.08);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(183, 110, 121, 0.25);
-  box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  background: rgba(183, 110, 121, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(183, 110, 121, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transform: translateZ(0);
 }
 
 /* ============================================
@@ -77,20 +76,20 @@ html, body {
 
 .glow-editorial-rosegold {
   text-shadow:
-    0 0 12px rgba(183, 110, 121, 0.5),
-    0 0 30px rgba(183, 110, 121, 0.25);
+    0 0 10px rgba(183, 110, 121, 0.5),
+    0 0 24px rgba(183, 110, 121, 0.25);
 }
 
 .glow-editorial-gold {
   text-shadow:
-    0 0 14px rgba(247, 214, 219, 0.6),
-    0 0 35px rgba(183, 110, 121, 0.3);
+    0 0 12px rgba(247, 214, 219, 0.6),
+    0 0 28px rgba(183, 110, 121, 0.3);
 }
 
 .glow-editorial-plum {
   text-shadow:
-    0 0 14px rgba(221, 160, 221, 0.5),
-    0 0 35px rgba(221, 160, 221, 0.25);
+    0 0 12px rgba(221, 160, 221, 0.5),
+    0 0 28px rgba(221, 160, 221, 0.25);
 }
 
 /* ============================================
@@ -99,94 +98,71 @@ html, body {
 
 @keyframes gift-float {
   0%, 100% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translate3d(0, 0px, 0) rotate(0deg);
   }
   50% {
-    transform: translateY(-7px) rotate(0.4deg);
+    transform: translate3d(0, -6px, 0) rotate(0.3deg);
   }
 }
 
 @keyframes shadow-breathe {
   0%, 100% {
-    transform: scale(1);
-    opacity: 0.55;
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.5;
   }
   50% {
-    transform: scale(0.86);
+    transform: translate3d(0, 0, 0) scale(0.88);
     opacity: 0.32;
-  }
-}
-
-@keyframes light-pool-pulse {
-  0%, 100% {
-    opacity: 0.65;
-    transform: scale(1) translate(-50%, -50%);
-  }
-  50% {
-    opacity: 0.95;
-    transform: scale(1.14) translate(-50%, -50%);
   }
 }
 
 @keyframes haze-drift-1 {
   0% {
-    transform: translate(0px, 0px) rotate(0deg) scale(1);
+    transform: translate3d(0px, 0px, 0) rotate(0deg);
   }
-  33% {
-    transform: translate(30px, -20px) rotate(4deg) scale(1.08);
-  }
-  66% {
-    transform: translate(-20px, 25px) rotate(-3deg) scale(0.95);
+  50% {
+    transform: translate3d(20px, -15px, 0) rotate(3deg);
   }
   100% {
-    transform: translate(0px, 0px) rotate(0deg) scale(1);
+    transform: translate3d(0px, 0px, 0) rotate(0deg);
   }
 }
 
 @keyframes haze-drift-2 {
   0% {
-    transform: translate(0px, 0px) rotate(0deg) scale(1);
+    transform: translate3d(0px, 0px, 0) rotate(0deg);
   }
-  33% {
-    transform: translate(-35px, 25px) rotate(-5deg) scale(1.05);
-  }
-  66% {
-    transform: translate(25px, -30px) rotate(3deg) scale(1.12);
+  50% {
+    transform: translate3d(-20px, 15px, 0) rotate(-3deg);
   }
   100% {
-    transform: translate(0px, 0px) rotate(0deg) scale(1);
+    transform: translate3d(0px, 0px, 0) rotate(0deg);
   }
 }
 
 @keyframes light-leak-drift {
   0% {
     opacity: 0;
-    transform: translate(-20%, -20%) rotate(-15deg) scale(0.9);
-  }
-  25% {
-    opacity: 0.35;
+    transform: translate3d(-15%, -15%, 0) rotate(-10deg);
   }
   50% {
-    opacity: 0.6;
-    transform: translate(10%, 10%) rotate(-5deg) scale(1.1);
-  }
-  75% {
-    opacity: 0.35;
+    opacity: 0.45;
+    transform: translate3d(5%, 5%, 0) rotate(-4deg);
   }
   100% {
     opacity: 0;
-    transform: translate(30%, 30%) rotate(5deg) scale(1);
+    transform: translate3d(20%, 20%, 0) rotate(4deg);
   }
 }
 
 @keyframes sparkle-twinkle {
   0%, 100% {
     opacity: 0;
-    transform: scale(0.3) rotate(0deg);
+    transform: translate3d(0, 0, 0) scale(0.3) rotate(0deg);
   }
   50% {
     opacity: 0.95;
-    transform: scale(1.15) rotate(45deg);
+    transform: translate3d(0, 0, 0) scale(1.1) rotate(45deg);
   }
 }
 
@@ -196,30 +172,32 @@ html, body {
 
 .animate-gift-float {
   animation: gift-float 5.2s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-shadow-breathe {
   animation: shadow-breathe 5.2s ease-in-out infinite;
-}
-
-.animate-light-pool {
-  animation: light-pool-pulse 11s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 .animate-haze-1 {
   animation: haze-drift-1 28s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-haze-2 {
   animation: haze-drift-2 34s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-light-leak {
   animation: light-leak-drift 22s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 .animate-sparkle {
   animation: sparkle-twinkle 3.5s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 /* Safe area padding utilities */

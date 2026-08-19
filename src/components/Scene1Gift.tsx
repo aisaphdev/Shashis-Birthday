@@ -17,17 +17,6 @@ export default function Scene1Gift({ onComplete }: Scene1Props) {
   const [isOpened, setIsOpened] = useState(false);
   const [ribbonPulled, setRibbonPulled] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  // Track desktop mouse position for subtle atmospheric parallax
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const { clientX, clientY } = e;
-    const { innerWidth, innerHeight } = window;
-    setMousePos({
-      x: (clientX / innerWidth) * 2 - 1,
-      y: (clientY / innerHeight) * 2 - 1,
-    });
-  };
 
   const handleOpen = () => {
     if (isOpened || ribbonPulled) return;
@@ -44,35 +33,26 @@ export default function Scene1Gift({ onComplete }: Scene1Props) {
       // Phase 3: Transition to reveal scene
       setTimeout(() => {
         onComplete();
-      }, 2500);
-    }, 700);
+      }, 2400);
+    }, 600);
   };
 
   const fireConfetti = () => {
-    const duration = 2800;
-    const end = Date.now() + duration;
-
-    const frame = () => {
-      confetti({
-        particleCount: 7,
-        angle: 60,
-        spread: 65,
-        origin: { x: 0.08, y: 0.62 },
-        colors: ["#f7d6db", "#b76e79", "#dda0dd", "#0d9488", "#faf3e6"],
-      });
-      confetti({
-        particleCount: 7,
-        angle: 120,
-        spread: 65,
-        origin: { x: 0.92, y: 0.62 },
-        colors: ["#f7d6db", "#b76e79", "#dda0dd", "#0d9488", "#faf3e6"],
-      });
-
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
-      }
-    };
-    frame();
+    // Discrete lightweight dual burst (ultra-fast 60 FPS mobile friendly)
+    confetti({
+      particleCount: 30,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0.1, y: 0.6 },
+      colors: ["#f7d6db", "#b76e79", "#dda0dd", "#0d9488", "#faf3e6"],
+    });
+    confetti({
+      particleCount: 30,
+      angle: 120,
+      spread: 55,
+      origin: { x: 0.9, y: 0.6 },
+      colors: ["#f7d6db", "#b76e79", "#dda0dd", "#0d9488", "#faf3e6"],
+    });
   };
 
   return (
@@ -80,11 +60,10 @@ export default function Scene1Gift({ onComplete }: Scene1Props) {
       className="w-full h-[100dvh] min-h-[100dvh] flex flex-col justify-between items-center relative overflow-hidden safe-pt safe-pb safe-px select-none"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 1.04, filter: "blur(14px)" }}
-      transition={{ duration: 1, ease: "easeInOut" }}
-      onMouseMove={handleMouseMove}
+      exit={{ opacity: 0, scale: 1.02, filter: "blur(8px)" }}
+      transition={{ duration: 0.8, ease: "easeInOut" }}
     >
-      <Scene1Environment isHovered={isHovered} isOpened={isOpened} mousePos={mousePos} />
+      <Scene1Environment isHovered={isHovered} isOpened={isOpened} />
 
       {/* ============================================
           TOP / EDITORIAL HERO SECTION
@@ -149,14 +128,14 @@ export default function Scene1Gift({ onComplete }: Scene1Props) {
               }
             }}
           >
-            {/* Dynamic Ambient Glow behind the box */}
+            {/* Dynamic Ambient Glow behind the box (zero blur filter cost) */}
             <motion.div
-              className="absolute inset-0 rounded-full blur-[45px] pointer-events-none"
+              className="absolute -inset-6 rounded-full pointer-events-none"
               animate={{
                 background: isHovered
-                  ? "radial-gradient(circle, rgba(247,214,219,0.35) 0%, rgba(183,110,121,0.25) 45%, transparent 75%)"
-                  : "radial-gradient(circle, rgba(183,110,121,0.22) 0%, rgba(139,69,133,0.12) 50%, transparent 75%)",
-                scale: isHovered ? 1.35 : 1.2,
+                  ? "radial-gradient(circle, rgba(247,214,219,0.3) 0%, rgba(183,110,121,0.18) 40%, transparent 70%)"
+                  : "radial-gradient(circle, rgba(183,110,121,0.2) 0%, rgba(139,69,133,0.1) 42%, transparent 70%)",
+                scale: isHovered ? 1.2 : 1,
               }}
               transition={{ duration: 0.6 }}
             />
@@ -355,8 +334,9 @@ export default function Scene1Gift({ onComplete }: Scene1Props) {
               <Image
                 src={siteConfig.mascot.curious}
                 alt="Curious Mascot"
-                width={200}
-                height={200}
+                width={176}
+                height={176}
+                sizes="(max-width: 640px) 96px, (max-width: 768px) 128px, 176px"
                 className="w-full object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.7)]"
                 priority
               />

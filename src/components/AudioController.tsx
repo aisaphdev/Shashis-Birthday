@@ -15,29 +15,28 @@ export default function AudioController({ isEnabled, onToggle, currentScene }: A
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    if (!audioRef.current) {
-      const audio = new Audio(siteConfig.audio.backgroundMusic);
-      audio.loop = true;
-      audio.volume = 0.25;
-      audioRef.current = audio;
-    }
-
+    // Only instantiate and buffer the audio when the user has entered Scene 2+ and enabled audio
     if (isEnabled && currentScene > 1) {
-      // Browsers might still block this if there was no prior interaction,
-      // but Scene 1 requires a click to proceed.
+      if (!audioRef.current) {
+        const audio = new Audio(siteConfig.audio.backgroundMusic);
+        audio.loop = true;
+        audio.preload = "auto";
+        audio.volume = 0.25;
+        audioRef.current = audio;
+      }
       audioRef.current.play().catch((e) => console.log("Audio play blocked", e));
-    } else {
+    } else if (audioRef.current) {
       audioRef.current.pause();
     }
   }, [isEnabled, currentScene]);
 
-  // Adjust volume or track based on scene if desired
+  // Adjust volume based on scene
   useEffect(() => {
     if (audioRef.current) {
       if (currentScene === 6) {
-        audioRef.current.volume = 0.3; // Slightly louder for climax, capped at 30%
+        audioRef.current.volume = 0.3; // Climax celebration
       } else if (currentScene === 5) {
-        audioRef.current.volume = 0.15; // Quieter for letter
+        audioRef.current.volume = 0.15; // Intimate letter scene
       } else {
         audioRef.current.volume = 0.25;
       }

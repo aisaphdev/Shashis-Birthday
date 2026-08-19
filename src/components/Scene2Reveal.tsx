@@ -16,20 +16,20 @@ export default function Scene2Reveal({ onNext }: Scene2Props) {
   useEffect(() => {
     // Fire delicate initial celebratory burst
     confetti({
-      particleCount: 55,
-      spread: 70,
+      particleCount: 35,
+      spread: 60,
       origin: { y: 0.55 },
       colors: ["#f7d6db", "#b76e79", "#dda0dd", "#0d9488", "#faf3e6"],
     });
 
-    // Generate subtle floating diamond sparkles
-    setDiamondSparkles(Array.from({ length: 8 }, (_, i) => ({
+    // Generate subtle floating diamond sparkles (lightweight)
+    setDiamondSparkles(Array.from({ length: 4 }, (_, i) => ({
       id: i,
-      left: `${10 + Math.random() * 80}%`,
-      top: `${10 + Math.random() * 80}%`,
-      size: 6 + Math.random() * 6,
-      delay: Math.random() * 4,
-      duration: 3 + Math.random() * 3,
+      left: [`15%`, `80%`, `25%`, `75%`][i],
+      top: [`20%`, `30%`, `75%`, `65%`][i],
+      size: 6 + (i % 3),
+      delay: i * 1.5,
+      duration: 3.5,
     })));
   }, []);
 
@@ -38,16 +38,31 @@ export default function Scene2Reveal({ onNext }: Scene2Props) {
       className="w-full h-[100dvh] min-h-[100dvh] flex flex-col justify-between items-center relative overflow-hidden safe-pt safe-pb safe-px select-none"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 0.96, filter: "blur(12px)" }}
-      transition={{ duration: 0.9, ease: "easeInOut" }}
+      exit={{ opacity: 0, scale: 0.98, filter: "blur(6px)" }}
+      transition={{ duration: 0.7, ease: "easeInOut" }}
     >
       {/* Deep velvet gradient background: Navy → Midnight Maroon */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#050811] via-[#100b1a] to-[#25091a] -z-10" />
 
-      {/* Atmospheric Ambient Light Blooms */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[clamp(300px,80vw,600px)] h-[clamp(300px,80vw,600px)] bg-[#b76e79]/15 rounded-full blur-[130px] -z-10" />
-      <div className="absolute bottom-10 right-10 w-72 h-72 bg-[#0d9488]/12 rounded-full blur-[100px] -z-10" />
-      <div className="absolute top-10 left-10 w-72 h-72 bg-[#dda0dd]/10 rounded-full blur-[100px] -z-10" />
+      {/* Atmospheric Ambient Light Blooms (Native GPU Fill - Zero Blur Cost) */}
+      <div
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[clamp(300px,80vw,600px)] h-[clamp(300px,80vw,600px)] rounded-full -z-10"
+        style={{
+          background: "radial-gradient(circle, rgba(183, 110, 121, 0.28) 0%, rgba(139, 69, 133, 0.12) 40%, transparent 72%)",
+        }}
+      />
+      <div
+        className="absolute bottom-10 right-10 w-72 h-72 rounded-full -z-10"
+        style={{
+          background: "radial-gradient(circle, rgba(13, 148, 136, 0.22) 0%, transparent 68%)",
+        }}
+      />
+      <div
+        className="absolute top-10 left-10 w-72 h-72 rounded-full -z-10"
+        style={{
+          background: "radial-gradient(circle, rgba(221, 160, 221, 0.2) 0%, transparent 68%)",
+        }}
+      />
 
       {/* Delicate 4-Point Diamond Sparkles */}
       {diamondSparkles.map((s) => (
@@ -86,8 +101,9 @@ export default function Scene2Reveal({ onNext }: Scene2Props) {
             <Image 
               src={siteConfig.mascot.happy} 
               alt="Happy Mascot" 
-              width={200} 
-              height={200} 
+              width={160} 
+              height={160} 
+              sizes="(max-width: 640px) 96px, (max-width: 768px) 128px, 160px"
               className="w-full object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.6)]"
               priority
             />

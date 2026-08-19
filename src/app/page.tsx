@@ -1,14 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { AnimatePresence } from "framer-motion";
 import Scene1Gift from "@/components/Scene1Gift";
-import Scene2Reveal from "@/components/Scene2Reveal";
-import Scene3Story from "@/components/Scene3Story";
-import Scene4Quest from "@/components/Scene4Quest";
-import Scene5Letter from "@/components/Scene5Letter";
-import Scene6Ending from "@/components/Scene6Ending";
 import AudioController from "@/components/AudioController";
+
+// Code-split Scenes 2-6 to minimize initial JavaScript bundle and TBT
+const Scene2Reveal = dynamic(() => import("@/components/Scene2Reveal"), { ssr: false });
+const Scene3Story = dynamic(() => import("@/components/Scene3Story"), { ssr: false });
+const Scene4Quest = dynamic(() => import("@/components/Scene4Quest"), { ssr: false });
+const Scene5Letter = dynamic(() => import("@/components/Scene5Letter"), { ssr: false });
+const Scene6Ending = dynamic(() => import("@/components/Scene6Ending"), { ssr: false });
 
 export default function Home() {
   const [currentScene, setCurrentScene] = useState(1);
