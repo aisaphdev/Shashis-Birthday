@@ -1,0 +1,272 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #070b14;
+  --color-foreground: #faf3e6;
+  --color-primary: #b76e79;
+  --color-secondary: #0d9488;
+  --color-accent: #dda0dd;
+  --color-maroon: #7a0f2e;
+  --color-navy: #070b14;
+  --color-beige: #faf3e6;
+  --color-lavender: #e8e2f8;
+  --color-plum: #8b4585;
+  --color-rosegold: #b76e79;
+  --color-teal: #0d9488;
+
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+  --font-handwriting: var(--font-handwriting);
+}
+
+:root {
+  --background: #070b14;
+  --foreground: #faf3e6;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* ============================================
+   BASE STYLES & MOBILE OPTIMIZATIONS
+   ============================================ */
+
+html, body {
+  height: 100%;
+  min-height: 100dvh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* ============================================
+   LUXURY FROSTED GLASS & VELVET SURFACES
+   ============================================ */
+
+.glass-luxury {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 20px rgba(183, 110, 121, 0.05);
+}
+
+.glass-pill {
+  background: rgba(183, 110, 121, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(183, 110, 121, 0.25);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* ============================================
+   CINEMATIC GLOW & TEXT SHADOWS
+   ============================================ */
+
+.glow-editorial-rosegold {
+  text-shadow:
+    0 0 12px rgba(183, 110, 121, 0.5),
+    0 0 30px rgba(183, 110, 121, 0.25);
+}
+
+.glow-editorial-gold {
+  text-shadow:
+    0 0 14px rgba(247, 214, 219, 0.6),
+    0 0 35px rgba(183, 110, 121, 0.3);
+}
+
+.glow-editorial-plum {
+  text-shadow:
+    0 0 14px rgba(221, 160, 221, 0.5),
+    0 0 35px rgba(221, 160, 221, 0.25);
+}
+
+/* ============================================
+   ORGANIC IDLE ANIMATIONS & ATMOSPHERIC LIGHT
+   ============================================ */
+
+@keyframes gift-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(0.4deg);
+  }
+}
+
+@keyframes shadow-breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(0.86);
+    opacity: 0.32;
+  }
+}
+
+@keyframes light-pool-pulse {
+  0%, 100% {
+    opacity: 0.65;
+    transform: scale(1) translate(-50%, -50%);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.14) translate(-50%, -50%);
+  }
+}
+
+@keyframes haze-drift-1 {
+  0% {
+    transform: translate(0px, 0px) rotate(0deg) scale(1);
+  }
+  33% {
+    transform: translate(30px, -20px) rotate(4deg) scale(1.08);
+  }
+  66% {
+    transform: translate(-20px, 25px) rotate(-3deg) scale(0.95);
+  }
+  100% {
+    transform: translate(0px, 0px) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes haze-drift-2 {
+  0% {
+    transform: translate(0px, 0px) rotate(0deg) scale(1);
+  }
+  33% {
+    transform: translate(-35px, 25px) rotate(-5deg) scale(1.05);
+  }
+  66% {
+    transform: translate(25px, -30px) rotate(3deg) scale(1.12);
+  }
+  100% {
+    transform: translate(0px, 0px) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes light-leak-drift {
+  0% {
+    opacity: 0;
+    transform: translate(-20%, -20%) rotate(-15deg) scale(0.9);
+  }
+  25% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(10%, 10%) rotate(-5deg) scale(1.1);
+  }
+  75% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(30%, 30%) rotate(5deg) scale(1);
+  }
+}
+
+@keyframes sparkle-twinkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.15) rotate(45deg);
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.animate-gift-float {
+  animation: gift-float 5.2s ease-in-out infinite;
+}
+
+.animate-shadow-breathe {
+  animation: shadow-breathe 5.2s ease-in-out infinite;
+}
+
+.animate-light-pool {
+  animation: light-pool-pulse 11s ease-in-out infinite;
+}
+
+.animate-haze-1 {
+  animation: haze-drift-1 28s ease-in-out infinite;
+}
+
+.animate-haze-2 {
+  animation: haze-drift-2 34s ease-in-out infinite;
+}
+
+.animate-light-leak {
+  animation: light-leak-drift 22s ease-in-out infinite;
+}
+
+.animate-sparkle {
+  animation: sparkle-twinkle 3.5s ease-in-out infinite;
+}
+
+/* Safe area padding utilities */
+.safe-pt {
+  padding-top: max(1rem, env(safe-area-inset-top, 1rem));
+}
+
+.safe-pb {
+  padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 1.25rem));
+}
+
+.safe-px {
+  padding-left: max(1.25rem, env(safe-area-inset-left, 1.25rem));
+  padding-right: max(1.25rem, env(safe-area-inset-right, 1.25rem));
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(183, 110, 121, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(183, 110, 121, 0.5);
+}
+
+::selection {
+  background: rgba(183, 110, 121, 0.35);
+  color: #faf3e6;
+}
+
+/* ============================================
+   ACCESSIBILITY: PREFERS REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
