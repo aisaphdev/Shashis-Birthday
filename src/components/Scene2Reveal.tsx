@@ -38,7 +38,7 @@ export default function Scene2Reveal({ onNext }: Scene2Props) {
       className="w-full h-[100dvh] min-h-[100dvh] flex flex-col justify-between items-center relative overflow-hidden safe-pt safe-pb safe-px select-none"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 0.98, filter: "blur(6px)" }}
+      exit={{ opacity: 0, scale: 0.98 }}
       transition={{ duration: 0.7, ease: "easeInOut" }}
     >
       {/* Deep velvet gradient background: Navy → Midnight Maroon */}
@@ -131,7 +131,7 @@ export default function Scene2Reveal({ onNext }: Scene2Props) {
       {/* ==================== CENTER: STORY INTRO CARD ==================== */}
       <div className="w-full max-w-md sm:max-w-lg z-10 my-auto py-2">
         <motion.div 
-          className="glass-luxury p-5 sm:p-7 rounded-2xl sm:rounded-3xl shadow-2xl space-y-3 sm:space-y-4 text-center"
+          className="glass-luxury glass-shimmer p-5 sm:p-7 rounded-2xl sm:rounded-3xl shadow-2xl space-y-3 sm:space-y-4 text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.8 }}
@@ -140,6 +140,10 @@ export default function Scene2Reveal({ onNext }: Scene2Props) {
             Okay... technically we&apos;ve only been friends since{" "}
             <span className="text-[#f7d6db] font-bold underline decoration-[#b76e79]/50 underline-offset-4">{siteConfig.friendshipStartDate}</span>.
           </p>
+
+          <div className="ornamental-divider my-2 opacity-60">
+            <span className="text-[10px] text-[#b76e79]">✦</span>
+          </div>
 
           <p className="text-xs sm:text-sm md:text-base text-[#e8e2f8]/90 font-medium leading-relaxed">
             But somehow, in just these few weeks, you went from being someone I barely knew to one of my favorite humans. 🫶
@@ -156,7 +160,7 @@ export default function Scene2Reveal({ onNext }: Scene2Props) {
           transition={{ delay: 1.3, duration: 0.7 }}
           onClick={onNext}
         >
-          Continue →
+          Our Story Begins →
         </motion.button>
       </div>
     </motion.div>

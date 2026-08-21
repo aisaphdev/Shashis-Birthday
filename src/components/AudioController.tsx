@@ -49,7 +49,7 @@ export default function AudioController({ isEnabled, onToggle, currentScene }: A
     <motion.button
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="fixed z-50 p-3 rounded-full glass hover:bg-white/10 active:scale-90 transition-transform cursor-pointer shadow-lg"
+      className="fixed z-50 p-3 rounded-full glass hover:bg-white/10 active:scale-90 transition-transform cursor-pointer shadow-lg relative"
       style={{
         top: "max(1rem, env(safe-area-inset-top, 1rem))",
         right: "max(1rem, env(safe-area-inset-right, 1rem))",
@@ -57,8 +57,15 @@ export default function AudioController({ isEnabled, onToggle, currentScene }: A
       onClick={onToggle}
       aria-label="Toggle audio"
     >
+      {/* Sound wave pulse ring */}
+      {isEnabled && (
+        <span 
+          className="absolute top-1/2 left-1/2 w-full h-full rounded-full border border-[#b76e79]/40 pointer-events-none"
+          style={{ animation: "sound-ring-pulse 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite" }}
+        />
+      )}
       {isEnabled ? (
-        <Volume2 className="w-5 h-5 text-[#b76e79]" />
+        <Volume2 className="w-5 h-5 text-[#f7d6db]" />
       ) : (
         <VolumeX className="w-5 h-5 text-[#e6e6fa]/60" />
       )}

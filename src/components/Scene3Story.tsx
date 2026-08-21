@@ -11,51 +11,69 @@ interface Scene3StoryProps {
 
 export default function Scene3Story({ onNext }: Scene3StoryProps) {
   const [messagesToShow, setMessagesToShow] = useState<number>(0);
+  const [typingSender, setTypingSender] = useState<string | null>(null);
   const [showFastForward, setShowFastForward] = useState(false);
   const [counter, setCounter] = useState(0);
   const [showContinue, setShowContinue] = useState(false);
 
-  // Handle chat message progression
+  // Handle chat message progression with realistic typing delays
   useEffect(() => {
     let timeouts: NodeJS.Timeout[] = [];
     
     siteConfig.storyMessages.forEach((msg, index) => {
-      const timeout = setTimeout(() => {
+      // Show typing indicator 450ms before message appears
+      const typingTimeout = setTimeout(() => {
+        setTypingSender(msg.sender);
+      }, Math.max(0, msg.delay - 450));
+      timeouts.push(typingTimeout);
+
+      const msgTimeout = setTimeout(() => {
         setMessagesToShow(index + 1);
+        setTypingSender(null);
         
         if (index === siteConfig.storyMessages.length - 1) {
           setTimeout(() => {
             setShowFastForward(true);
-          }, 1800);
+          }, 1600);
         }
       }, msg.delay);
-      timeouts.push(timeout);
+      timeouts.push(msgTimeout);
     });
 
     return () => timeouts.forEach(clearTimeout);
   }, []);
 
-  // Handle counter animation
+  // Handle counter animation with requestAnimationFrame
   useEffect(() => {
     if (showFastForward) {
-      const duration = 2000;
-      const steps = 60;
-      const stepTime = Math.abs(Math.floor(duration / steps));
+      let animationFrameId: number;
+      const startTime = performance.now();
+      const duration = 1600;
       const target = siteConfig.daysSince;
-      
-      let current = 0;
-      const timer = setInterval(() => {
-        current += target / steps;
-        if (current >= target) {
-          setCounter(target);
-          clearInterval(timer);
-          setTimeout(() => setShowContinue(true), 700);
-        } else {
-          setCounter(Math.floor(current));
+      let lastVal = -1;
+
+      const step = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // Smooth easeOutQuad
+        const easeOut = 1 - (1 - progress) * (1 - progress);
+        const currentVal = Math.floor(easeOut * target);
+
+        if (currentVal !== lastVal) {
+          lastVal = currentVal;
+          setCounter(currentVal);
         }
-      }, stepTime);
-      
-      return () => clearInterval(timer);
+
+        if (progress < 1) {
+          animationFrameId = requestAnimationFrame(step);
+        } else {
+          setCounter(target);
+          setTimeout(() => setShowContinue(true), 400);
+        }
+      };
+
+      animationFrameId = requestAnimationFrame(step);
+      return () => cancelAnimationFrame(animationFrameId);
     }
   }, [showFastForward]);
 
@@ -63,13 +81,23 @@ export default function Scene3Story({ onNext }: Scene3StoryProps) {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 0.98, filter: "blur(10px)" }}
-      transition={{ duration: 0.8 }}
+      exit={{ opacity: 0, scale: 0.98 }}
+      transition={{ duration: 0.6 }}
       className="min-h-[100dvh] w-full flex flex-col items-center justify-start pt-10 pb-20 sm:py-16 safe-px safe-pb relative overflow-y-auto bg-gradient-to-b from-[#050811] via-[#0f0c18] to-[#1a0815] select-none"
     >
-      {/* Ambient background bloom */}
-      <div className="absolute top-12 right-6 w-72 h-72 bg-[#0d9488]/10 rounded-full blur-[110px] -z-10" />
-      <div className="absolute bottom-16 left-6 w-80 h-80 bg-[#b76e79]/12 rounded-full blur-[110px] -z-10" />
+      {/* Ambient background blooms (Zero Blur Cost) */}
+      <div
+        className="absolute top-12 right-6 w-80 h-80 rounded-full -z-10"
+        style={{
+          background: "radial-gradient(circle, rgba(13, 148, 136, 0.2) 0%, transparent 70%)",
+        }}
+      />
+      <div
+        className="absolute bottom-16 left-6 w-80 h-80 rounded-full -z-10"
+        style={{
+          background: "radial-gradient(circle, rgba(183, 110, 121, 0.22) 0%, transparent 70%)",
+        }}
+      />
 
       {/* Intro Header */}
       <div className="text-center mb-6 sm:mb-10 max-w-lg px-2 z-10">
@@ -93,19 +121,20 @@ export default function Scene3Story({ onNext }: Scene3StoryProps) {
 
       {/* Chat Section */}
       <div className="w-full max-w-2xl flex flex-col md:flex-row items-center md:items-end gap-6 relative z-10 mb-8 sm:mb-12">
-        {/* Mascot Peeking (Desktop / Tablet) */}
+        {/* Mascot Peeking */}
         <motion.div 
           initial={{ x: -25, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.7 }}
-          className="hidden md:block w-1/3 flex-shrink-0"
+          transition={{ delay: 0.6, duration: 0.7 }}
+          className="w-20 sm:w-28 md:w-1/3 flex-shrink-0 mx-auto md:mx-0"
         >
           <div className="animate-gift-float">
             <Image 
               src={siteConfig.mascot.confused} 
               alt="Confused Mascot" 
-              width={240} 
-              height={300} 
+              width={200} 
+              height={240} 
+              sizes="(max-width: 768px) 100px, 200px"
               className="w-full object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.6)]"
             />
           </div>
@@ -136,6 +165,26 @@ export default function Scene3Story({ onNext }: Scene3StoryProps) {
               )}
             </AnimatePresence>
           ))}
+
+          {/* Typing Indicator */}
+          <AnimatePresence>
+            {typingSender && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.2 }}
+                className={`flex flex-col ${typingSender === siteConfig.recipientName ? 'items-end' : 'items-start'}`}
+              >
+                <span className="text-[9.5px] text-[#e8e2f8]/50 mb-1 px-1">{typingSender} is typing...</span>
+                <div className="px-3.5 py-2 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center gap-1.5">
+                  <span className="typing-dot" style={{ animation: "typing-dot-bounce 1.2s infinite ease-in-out" }} />
+                  <span className="typing-dot" style={{ animation: "typing-dot-bounce 1.2s infinite ease-in-out 0.2s" }} />
+                  <span className="typing-dot" style={{ animation: "typing-dot-bounce 1.2s infinite ease-in-out 0.4s" }} />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
@@ -145,7 +194,7 @@ export default function Scene3Story({ onNext }: Scene3StoryProps) {
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="text-center w-full max-w-md sm:max-w-xl glass-luxury p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-2xl mt-4 z-10"
+          className="text-center w-full max-w-md sm:max-w-xl glass-luxury glass-shimmer p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-2xl mt-4 z-10"
         >
           <p className="text-[#dda0dd] font-semibold tracking-[0.24em] text-[10px] sm:text-xs uppercase mb-3">FAST FORWARD</p>
           <div className="flex items-center justify-center gap-2 sm:gap-3 text-5xl sm:text-6xl md:text-7xl font-serif font-black mb-3 text-[#f7d6db]">

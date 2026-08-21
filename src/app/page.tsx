@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { AnimatePresence } from "framer-motion";
 import Scene1Gift from "@/components/Scene1Gift";
 import AudioController from "@/components/AudioController";
+import SceneProgress from "@/components/SceneProgress";
 
 // Code-split Scenes 2-6 to minimize initial JavaScript bundle and TBT
 const Scene2Reveal = dynamic(() => import("@/components/Scene2Reveal"), { ssr: false });
@@ -35,6 +36,8 @@ export default function Home() {
         onToggle={() => setAudioEnabled(!audioEnabled)} 
         currentScene={currentScene} 
       />
+
+      <SceneProgress currentScene={currentScene} />
 
       <AnimatePresence mode="wait">
         {currentScene === 1 && (

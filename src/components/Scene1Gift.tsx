@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { siteConfig } from "@/config/data";
 import confetti from "canvas-confetti";
@@ -17,6 +17,31 @@ export default function Scene1Gift({ onComplete }: Scene1Props) {
   const [isOpened, setIsOpened] = useState(false);
   const [ribbonPulled, setRibbonPulled] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+
+  // Easter egg: tap mascot 5 times for heart confetti
+  const mascotTapCount = useRef(0);
+  const mascotTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const handleMascotTap = useCallback(() => {
+    mascotTapCount.current += 1;
+    if (mascotTapTimer.current) clearTimeout(mascotTapTimer.current);
+    mascotTapTimer.current = setTimeout(() => { mascotTapCount.current = 0; }, 1200);
+
+    if (mascotTapCount.current >= 5) {
+      mascotTapCount.current = 0;
+      // Heart-shaped confetti burst
+      const heart = confetti.shapeFromPath({ path: "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" });
+      confetti({
+        particleCount: 50,
+        spread: 80,
+        origin: { x: 0.15, y: 0.85 },
+        shapes: [heart],
+        colors: ["#b76e79", "#f7d6db", "#dda0dd", "#e5a9b1", "#d4a0a7"],
+        scalar: 1.3,
+        gravity: 0.8,
+        ticks: 120,
+      });
+    }
+  }, []);
 
   const handleOpen = () => {
     if (isOpened || ribbonPulled) return;
@@ -60,7 +85,7 @@ export default function Scene1Gift({ onComplete }: Scene1Props) {
       className="w-full h-[100dvh] min-h-[100dvh] flex flex-col justify-between items-center relative overflow-hidden safe-pt safe-pb safe-px select-none"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 1.02, filter: "blur(8px)" }}
+      exit={{ opacity: 0, scale: 1.02 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
     >
       <Scene1Environment isHovered={isHovered} isOpened={isOpened} />
@@ -315,7 +340,7 @@ export default function Scene1Gift({ onComplete }: Scene1Props) {
       {/* ============================================
           BOTTOM SECTION / MASCOT INTEGRATION
           ============================================ */}
-      <div className="w-full relative h-16 sm:h-20 flex items-end justify-start z-10 pointer-events-none flex-shrink-0">
+      <div className="w-full relative h-16 sm:h-20 flex items-end justify-start z-10 flex-shrink-0">
         <AnimatePresence>
           {!isOpened && (
             <motion.div
@@ -329,7 +354,8 @@ export default function Scene1Gift({ onComplete }: Scene1Props) {
                 y: { duration: 3.8, repeat: Infinity, ease: "easeInOut" },
                 opacity: { duration: 0.7 },
               }}
-              className="absolute -bottom-1 left-3 sm:left-6 md:left-12 w-24 sm:w-32 md:w-44"
+              className="absolute -bottom-1 left-3 sm:left-6 md:left-12 w-24 sm:w-32 md:w-44 cursor-pointer"
+              onClick={handleMascotTap}
             >
               <Image
                 src={siteConfig.mascot.curious}
